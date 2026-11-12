@@ -1,0 +1,18 @@
+{
+  "name": "回声 · 吉他和弦谱",
+  "short_name": "回声",
+  "description": "放在谱架上的吉他和弦谱:歌词滚动、字号可调、和弦标在字上。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f9f4ee",
+  "theme_color": "#f9f4ee",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

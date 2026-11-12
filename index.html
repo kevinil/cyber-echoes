@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>回声 · 吉他和弦谱</title>
+<meta name="description" content="一个放在谱架上的吉他和弦谱阅读器:歌词滚动、字号可调、和弦标在字上。">
+<meta name="theme-color" content="#f9f4ee">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="回声">
+<link rel="icon" href="./icons/icon-192.png" type="image/png">
+<link rel="stylesheet" href="./app.css">
+</head>
+<body>
+
+<section id="view-library" class="view" aria-labelledby="lib-h">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand__name">回声</span>
+      <span class="brand__sub">吉他谱</span>
+    </div>
+    <button type="button" class="btn btn-primary" id="btn-new">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      新建谱
+    </button>
+  </header>
+
+  <main class="lib-scroll">
+    <div class="lib-wrap">
+      <div class="lib-head">
+        <h1 id="lib-h">曲库</h1>
+        <p class="lib-count num" id="lib-count"></p>
+      </div>
+      <ul class="song-list" id="song-list"></ul>
+      <div class="empty" id="lib-empty" hidden>
+        <p class="empty__title">还没有谱子</p>
+        <p class="empty__text">把歌词和和弦写进来,弹的时候让它自己滚。</p>
+        <button type="button" class="link-btn" id="btn-new-empty">新建第一首</button>
+      </div>
+      <p class="lib-hint" id="lib-hint" hidden>在 Safari 里点「分享,添加到主屏幕」,先装好再录谱;装好后断网也能用。</p>
+    </div>
+  </main>
+
+  <footer class="lib-foot">
+    <div class="lib-foot__inner">
+      <button type="button" class="link-btn" id="btn-export">导出备份</button>
+      <button type="button" class="link-btn" id="btn-import">导入备份</button>
+      <input type="file" id="file-import" accept=".json,application/json" aria-label="导入备份文件" hidden>
+      <span class="lib-foot__note">数据只存在这台设备上</span>
+    </div>
+  </footer>
+</section>
+
+<section id="view-score" class="view view-score" aria-labelledby="score-title" hidden>
+  <header class="score-top" id="score-top">
+    <button type="button" class="icon-btn" id="btn-back" aria-label="返回曲库">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="score-heading">
+      <h1 id="score-title">未命名</h1>
+      <p class="score-sub" id="score-sub"></p>
+    </div>
+    <div class="score-tools">
+      <button type="button" class="icon-btn" id="btn-edit" aria-label="编辑这首谱">
+        <svg width="19" height="19" viewBox="0 0 20 20" aria-hidden="true"><path d="m12.8 3.6 3.6 3.6M4 16l.8-3.7L13.6 3.5a1.5 1.5 0 0 1 2.1 0l.8.8a1.5 1.5 0 0 1 0 2.1L7.7 15.2 4 16Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="transpose" role="group" aria-label="转调">
+        <button type="button" class="step" id="btn-tr-down" aria-label="降半音">−</button>
+        <button type="button" class="key" id="btn-tr-reset" aria-label="还原原调">C</button>
+        <button type="button" class="step" id="btn-tr-up" aria-label="升半音">+</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="score-scroll" id="score-scroll">
+    <article class="score-paper" id="score-paper"></article>
+  </main>
+
+  <footer class="transport" id="transport">
+    <div class="font-ctl" role="group" aria-label="字号">
+      <button type="button" class="tbtn" id="btn-font-down" aria-label="缩小字号">A−</button>
+      <button type="button" class="tbtn" id="btn-font-up" aria-label="放大字号">A+</button>
+    </div>
+    <div class="speed-ctl">
+      <span class="speed-lab">速度</span>
+      <label class="visually-hidden" for="speed">滚动速度</label>
+      <input type="range" id="speed" min="4" max="80" step="1" value="24">
+      <span class="speed-num num" id="speed-num">24</span>
+    </div>
+    <button type="button" class="btn btn-primary btn-scroll" id="btn-scroll" aria-pressed="false">
+      <svg class="ico" id="ico-play" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5.5 3.8v10.4L14.5 9 5.5 3.8Z" fill="currentColor"/></svg>
+      <svg class="ico" id="ico-pause" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true" hidden><path d="M5 3.5h2.6v11H5zM10.4 3.5H13v11h-2.6z" fill="currentColor"/></svg>
+      <span id="scroll-label">滚动</span>
+    </button>
+  </footer>
+</section>
+
+<section id="view-editor" class="view view-editor" aria-labelledby="editor-h" hidden>
+  <header class="editor-top">
+    <button type="button" class="link-btn" id="btn-editor-back">取消</button>
+    <h1 id="editor-h">新建谱</h1>
+    <button type="button" class="btn btn-primary" id="btn-save">保存</button>
+  </header>
+
+  <main class="editor-scroll">
+    <div class="editor-wrap">
+      <div class="fields">
+        <label class="field">
+          <span class="field__label">标题</span>
+          <input id="f-title" type="text" autocomplete="off" maxlength="80" placeholder="未命名">
+        </label>
+        <label class="field">
+          <span class="field__label">歌手</span>
+          <input id="f-artist" type="text" autocomplete="off" maxlength="80" placeholder="可选">
+        </label>
+        <label class="field field--key">
+          <span class="field__label">原调</span>
+          <input id="f-key" type="text" autocomplete="off" maxlength="12" placeholder="C" spellcheck="false">
+        </label>
+      </div>
+
+      <div class="field field--text">
+        <div class="field__bar">
+          <label for="f-text" class="field__label">谱面</label>
+          <span class="field__hint">[C] 放在字前</span>
+        </div>
+        <div class="palette" id="palette" role="toolbar" aria-label="插入和弦"></div>
+        <textarea id="f-text" spellcheck="false" autocapitalize="off" autocorrect="off" rows="14" placeholder="[C]长亭外 [G]古道边&#10;[F]芳草碧连 [C]天"></textarea>
+      </div>
+
+      <p class="hint">方括号里的文字会落在它后面那个字的上方。可以写和弦,也可以写「前奏」「间奏」。以 # 开头的一行是小标题。</p>
+
+      <section class="preview" aria-labelledby="preview-h">
+        <h2 id="preview-h">预览</h2>
+        <div class="preview__paper">
+          <div class="score-paper" id="editor-preview"></div>
+        </div>
+      </section>
+
+      <button type="button" class="link-btn danger" id="btn-delete" hidden>删除这首谱</button>
+    </div>
+  </main>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<noscript>
+  <p style="padding:2rem;font-family:system-ui">这个看谱器需要开启 JavaScript。</p>
+</noscript>
+
+<script src="./app.js" defer></script>
+</body>
+</html>

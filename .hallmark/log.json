@@ -1,0 +1,21 @@
+[
+ {
+  "entry": "2026-11-12 · echo guitar chord reader",
+  "prompt": "minimal iPad guitar chord and lyrics viewer with auto-scroll, custom chord placement, used at a music stand",
+  "scope": "app",
+  "shape": "app screen",
+  "theme": "Bloom (deal 1/3)",
+  "axes": "light/grotesk-sans/warm",
+  "nav": "top bar, wordmark and one action",
+  "signature": "the chord set on its syllable, transposed per song",
+  "sections": "library list · score reader · ChordPro editor",
+  "states": "library empty/full · score idle/scrolling/end · editor empty/filled · import error",
+  "waived": [
+   "39b"
+  ],
+  "photos": [],
+  "fingerprint": "echo-chord-reader-v1",
+  "date": "2026-11-12",
+  "mode": "build"
+ }
+]
